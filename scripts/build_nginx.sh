@@ -16,6 +16,9 @@ HEADERS_MORE_VERSION=${HEADERS_MORE_VERSION-0.23}
 nginx_tarball_url=http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 pcre_tarball_url=http://garr.dl.sourceforge.net/project/pcre/pcre/${PCRE_VERSION}/pcre-${PCRE_VERSION}.tar.bz2
 headers_more_nginx_module_url=https://github.com/agentzh/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz
+ngx_postgres_url=https://github.com/FRiCKLE/ngx_postgres/archive/1.0rc7.tar.gz
+rds_json_url=https://github.com/openresty/rds-json-nginx-module/archive/v0.15.tar.gz
+ngx_devel_kit_url=https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz
 
 temp_dir=$(mktemp -d /tmp/nginx.XXXXXXXXXX)
 
@@ -35,15 +38,24 @@ echo "Downloading $pcre_tarball_url"
 echo "Downloading $headers_more_nginx_module_url"
 (cd nginx-${NGINX_VERSION} && curl -L $headers_more_nginx_module_url | tar xvz )
 
+echo "Downloading $ngx_postgres_url"
+(cd nginx-${NGINX_VERSION} && curl -L $ngx_postgres_url | tar xvz )
+
+echo "Downloading $rds_json_url"
+(cd nginx-${NGINX_VERSION} && curl -L $rds_json_url | tar xvz )
+
+echo "Downloading $ngx_devel_kit_url"
+(cd nginx-${NGINX_VERSION} && curl -L $ngx_devel_kit_url | tar xvz )
+
 (
 	cd nginx-${NGINX_VERSION}
 	./configure \
 		--with-pcre=pcre-${PCRE_VERSION} \
 		--prefix=/tmp/nginx \
 		--add-module=/${temp_dir}/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEADERS_MORE_VERSION}
-		--add-module=../modules/ngx-postgres
-		--add-module=../modules/rds-json
-		--add-module=../modules/ngx-devel
+		--add-module=/${temp_dir}/nginx-${NGINX_VERSION}/ngx_postgres-1.0rc7
+		--add-module=/${temp_dir}/nginx-${NGINX_VERSION}/rds-json-nginx-module-0.15
+		--add-module=/${temp_dir}/nginx-${NGINX_VERSION}/ngx_devel_kit-0.3.0
 	make install
 )
 
