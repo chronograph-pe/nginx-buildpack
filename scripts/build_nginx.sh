@@ -41,6 +41,9 @@ echo "Downloading $headers_more_nginx_module_url"
 		--with-pcre=pcre-${PCRE_VERSION} \
 		--prefix=/tmp/nginx \
 		--add-module=/${temp_dir}/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEADERS_MORE_VERSION}
+		--add-module=../modules/ngx-postgres
+		--add-module=../modules/rds-json
+		--add-module=../modules/ngx-devel
 	make install
 )
 
